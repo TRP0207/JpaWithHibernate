@@ -1,9 +1,8 @@
 package com.java.JpaWithHibernate.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Student {
@@ -14,9 +13,14 @@ public class Student {
 
     private String name;
 
-    private String favSubject;
+//    @OneToMany(cascade = CascadeType.ALL)                //  CascadeType.ALL will Delete courses Entries too when We delete Student
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Courses> courses;
 
     private String marks;
+
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Address address;
 
     public int getRollNo() {
         return rollNo;
@@ -34,12 +38,12 @@ public class Student {
         this.name = name;
     }
 
-    public String getFavSubject() {
-        return favSubject;
+    public List<Courses> getCourses() {
+        return courses;
     }
 
-    public void setFavSubject(String favSubject) {
-        this.favSubject = favSubject;
+    public void setCourses(List<Courses> courses) {
+        this.courses = courses;
     }
 
     public String getMarks() {
@@ -50,13 +54,22 @@ public class Student {
         this.marks = marks;
     }
 
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public String toString() {
         return "Student{" +
                 "rollNo=" + rollNo +
                 ", name='" + name + '\'' +
-                ", favSubject='" + favSubject + '\'' +
+                ", courses=" + courses +
                 ", marks='" + marks + '\'' +
+                ", address=" + address +
                 '}';
     }
 }

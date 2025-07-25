@@ -18,7 +18,11 @@ public class StudentController {
 
     @PostMapping("/add")
     public ResponseEntity<String> createStudent(@RequestBody Student student){
-        return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.CREATED);
+        try{
+            return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.CREATED);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/findByName/{name}")
@@ -29,5 +33,20 @@ public class StudentController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<Student>> getAllStudents(){
+        try{
+            List<Student> studentList = studentService.getAllStudents();
+            if (studentList != null) {
+                return new ResponseEntity<>(studentList, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e){
+            throw new RuntimeException("Error occurred..." + e.getMessage());
+        }
+
     }
 }

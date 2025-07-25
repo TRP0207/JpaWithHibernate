@@ -7,4 +7,5 @@ import java.util.List;
 public interface StudentService {
     public String saveStudent(Student student);
     public List<Student> findUserByName(String name);
+    public List<Student> getAllStudents();
 }
