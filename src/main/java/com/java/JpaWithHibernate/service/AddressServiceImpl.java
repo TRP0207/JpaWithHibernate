@@ -24,4 +24,9 @@ public class AddressServiceImpl implements AddressService{
     public List<Address> getAllAddresses() {
         return addressRepository.findAll();
     }
+
+    @Override
+    public void deleteAddress(int id) {
+        addressRepository.deleteById(id);
+    }
 }

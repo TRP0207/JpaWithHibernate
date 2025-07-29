@@ -37,6 +37,15 @@ public class CourseController {
         }catch (Exception e){
             throw new RuntimeException("Error occurred..." + e.getMessage());
         }
+    }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteCourse(@PathVariable  int id){
+        try{
+            coursesService.deleteCourse(id);
+            return new ResponseEntity<>("Course Deleted", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

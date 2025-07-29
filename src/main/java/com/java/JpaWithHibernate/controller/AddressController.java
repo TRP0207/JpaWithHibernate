@@ -39,4 +39,14 @@ public class AddressController {
         }
 
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteAddress(@PathVariable  int id){
+        try{
+            addressService.deleteAddress(id);
+            return new ResponseEntity<>("Address Deleted", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
