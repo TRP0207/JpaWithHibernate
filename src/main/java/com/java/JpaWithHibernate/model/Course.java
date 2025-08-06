@@ -1,6 +1,6 @@
 package com.java.JpaWithHibernate.model;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
@@ -9,14 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Courses {
+public class Course {
 
     @Id
     private int courseCode;
 
     private String courseName;
 
-    @ManyToMany(mappedBy = "courses")
+    @ManyToMany(mappedBy = "course")
+    @JsonIgnore
     private List<Student> students = new ArrayList<>();
 
     public int getCourseCode() {

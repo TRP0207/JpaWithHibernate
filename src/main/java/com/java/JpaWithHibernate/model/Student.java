@@ -1,5 +1,6 @@
 package com.java.JpaWithHibernate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -14,8 +15,9 @@ public class Student {
 
     private String name;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Courses> courses = new ArrayList<>();
+    @ManyToMany
+    @JsonIgnore
+    private List<Course> course = new ArrayList<>();
 
     private String marks;
 
@@ -38,12 +40,12 @@ public class Student {
         this.name = name;
     }
 
-    public List<Courses> getCourses() {
-        return courses;
+    public List<Course> getCourses() {
+        return course;
     }
 
-    public void setCourses(List<Courses> courses) {
-        this.courses = courses;
+    public void setCourses(List<Course> cours) {
+        this.course = cours;
     }
 
     public String getMarks() {

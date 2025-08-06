@@ -1,9 +1,7 @@
 package com.java.JpaWithHibernate.service;
 
-import com.java.JpaWithHibernate.model.Courses;
-import com.java.JpaWithHibernate.model.Student;
-import com.java.JpaWithHibernate.model.StudentDTO;
-import com.java.JpaWithHibernate.repo.CoursesRepository;
+import com.java.JpaWithHibernate.model.*;
+import com.java.JpaWithHibernate.repo.CourseRepository;
 import com.java.JpaWithHibernate.repo.StudentRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -12,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class StudentServiceImpl implements StudentService{
@@ -23,33 +19,34 @@ public class StudentServiceImpl implements StudentService{
     StudentRepository studentRepository;
 
     @Autowired
-    CoursesRepository coursesRepository;
+    CourseRepository courseRepository;
 
     @Autowired
     EntityManagerFactory entityManagerFactory;
-    
+
 
     @Override
-    public String saveStudent(StudentDTO studentDTO) throws Exception{
+    public String saveStudent(StudentRequestDTO studentRequestDTO) throws Exception{
             EntityManager entityManager = entityManagerFactory.createEntityManager();
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
             Student student = new Student();
-            student.setName(studentDTO.getName());
-            student.setMarks(studentDTO.getMarks());
-            student.setAddress(studentDTO.getAddress());
+            student.setName(studentRequestDTO.getName());
+            student.setMarks(studentRequestDTO.getMarks());
+            student.setAddress(convertToAddressEntity(studentRequestDTO.getAddress()));
 
-            List<Courses> courses = new ArrayList<>();
-            for (Integer courseCode : studentDTO.getCourseCodes()) {
-                Courses course = coursesRepository.findById(courseCode)
+            List<Course> cours = new ArrayList<>();
+            for (Integer courseCode : studentRequestDTO.getCourseCodes()) {
+                Course course = courseRepository.findById(courseCode)
                         .orElseThrow(() -> new RuntimeException("Course not found: " + courseCode));
-                courses.add(course);
+                cours.add(course);
                 //course.getStudents().add(student); // bi-directional
             }
 
-            student.setCourses(courses);
+            student.setCourses(cours);
             studentRepository.save(student);
             transaction.commit();
+            entityManager.close();
             return "Student is Saved...";
     }
 
@@ -74,4 +71,42 @@ public class StudentServiceImpl implements StudentService{
     public void deleteStudent(int id) {
         studentRepository.deleteById(id);
     }
+
+    @Override
+    public void saveAllStudents(List<StudentRequestDTO> studentRequestDTOList) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction =entityManager.getTransaction();
+        transaction.begin();
+        List<Student> studentList = new ArrayList<>();
+        for(StudentRequestDTO studentRequestDTO : studentRequestDTOList){
+            Student student = new Student();
+            student.setName(studentRequestDTO.getName());
+            student.setAddress(convertToAddressEntity(studentRequestDTO.getAddress()));
+            student.setMarks(studentRequestDTO.getMarks());
+            List<Course> cours = new ArrayList<>();
+            for (Integer courseCode : studentRequestDTO.getCourseCodes()) {
+                Course course = courseRepository.findById(courseCode)
+                        .orElseThrow(() -> new RuntimeException("Course not found: " + courseCode));
+                cours.add(course);
+                //course.getStudents().add(student); // bi-directional
+            }
+            student.setCourses(cours);
+            studentList.add(student);
+            student=null;
+        }
+        studentRepository.saveAll(studentList);
+        transaction.commit();
+        entityManager.close();
+    }
+
+    public Address convertToAddressEntity(AddressRequestDTO dto) {
+        Address address = new Address();
+        address.setId(dto.getId());
+        address.setAddLine1(dto.getAddLine1());
+        address.setAddLine2(dto.getAddLine2());
+        address.setPinCode(dto.getPinCode());
+        return address;
+    }
+
+
 }

@@ -1,15 +1,14 @@
 package com.java.JpaWithHibernate.model;
 
 import java.util.List;
-import java.util.Set;
 
-public class StudentDTO {
-
+public class StudentRequestDTO {
     private String name;
     private String marks;
-    private List<Integer> courseCodes;
-    private Address address;
+    private List<Integer> courseCodes; // only course codes for input
+    private AddressRequestDTO address;
 
+    // Getters and Setters
     public String getName() {
         return name;
     }
@@ -34,11 +33,11 @@ public class StudentDTO {
         this.courseCodes = courseCodes;
     }
 
-    public Address getAddress() {
+    public AddressRequestDTO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressRequestDTO address) {
         this.address = address;
     }
 }

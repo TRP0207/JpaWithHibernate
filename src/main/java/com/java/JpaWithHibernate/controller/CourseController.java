@@ -1,7 +1,7 @@
 package com.java.JpaWithHibernate.controller;
 
-import com.java.JpaWithHibernate.model.Courses;
-import com.java.JpaWithHibernate.service.CoursesService;
+import com.java.JpaWithHibernate.model.Course;
+import com.java.JpaWithHibernate.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,21 +14,21 @@ import java.util.List;
 public class CourseController {
 
     @Autowired
-    CoursesService coursesService;
+    CourseService courseService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addCourse(@RequestBody Courses courses){
+    public ResponseEntity<String> addCourse(@RequestBody Course course){
         try {
-            return new ResponseEntity<>(coursesService.saveCourse(courses), HttpStatus.CREATED);
+            return new ResponseEntity<>(courseService.saveCourse(course), HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Courses>> getCourse(){
+    public ResponseEntity<List<Course>> getCourse(){
         try{
-            List<Courses> courseList = coursesService.getAllCourse();
+            List<Course> courseList = courseService.getAllCourse();
             if (courseList != null) {
                 return new ResponseEntity<>(courseList, HttpStatus.OK);
             } else {
@@ -42,8 +42,18 @@ public class CourseController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable  int id){
         try{
-            coursesService.deleteCourse(id);
+            courseService.deleteCourse(id);
             return new ResponseEntity<>("Course Deleted", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/addAll")
+    public ResponseEntity<String> addAllCourses(@RequestBody List<Course> cours){
+        try{
+            courseService.saveAllCourses(cours);
+            return new ResponseEntity<>("Courses Added...", HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

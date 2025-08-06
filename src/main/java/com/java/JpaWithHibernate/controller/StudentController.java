@@ -1,7 +1,7 @@
 package com.java.JpaWithHibernate.controller;
 
 import com.java.JpaWithHibernate.model.Student;
-import com.java.JpaWithHibernate.model.StudentDTO;
+import com.java.JpaWithHibernate.model.StudentRequestDTO;
 import com.java.JpaWithHibernate.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class StudentController {
     StudentService studentService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> createStudent(@RequestBody StudentDTO student){
+    public ResponseEntity<String> createStudent(@RequestBody StudentRequestDTO student){
         try{
             return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.CREATED);
         }catch (Exception e){
@@ -56,6 +56,16 @@ public class StudentController {
         try{
             studentService.deleteStudent(id);
             return new ResponseEntity<>("Student Deleted", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/addAll")
+    public ResponseEntity<String> addAllStudent(@RequestBody List<StudentRequestDTO> students){
+        try{
+            studentService.saveAllStudents(students);
+            return new ResponseEntity<>("Students Added...", HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
