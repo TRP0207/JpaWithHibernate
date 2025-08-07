@@ -23,7 +23,7 @@ public class CourseController {
         try {
             return new ResponseEntity<>(courseService.saveCourse(courseRequestDTO), HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error occurred..." + e.getMessage());
         }
     }
 
@@ -47,7 +47,7 @@ public class CourseController {
             courseService.deleteCourse(id);
             return new ResponseEntity<>("Course Deleted", HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error occurred..." + e.getMessage());
         }
     }
 
@@ -57,7 +57,7 @@ public class CourseController {
             courseService.saveAllCourses(courseRequestDTOList);
             return new ResponseEntity<>("Courses Added...", HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error occurred..." + e.getMessage());
         }
     }
 }

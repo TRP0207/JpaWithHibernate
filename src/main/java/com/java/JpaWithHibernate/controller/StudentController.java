@@ -23,17 +23,21 @@ public class StudentController {
         try{
             return new ResponseEntity<>(studentService.saveStudent(student), HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error occurred..." + e.getMessage());
         }
     }
 
     @GetMapping("/findByName/{name}")
     public ResponseEntity<List<StudentResponseDTO>> getStudentByName(@PathVariable String name){
         List<StudentResponseDTO> students = studentService.findUserByName(name);
-        if (students != null) {
-            return new ResponseEntity<>(students, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try{
+            if (students != null) {
+                return new ResponseEntity<>(students, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error occurred..." + e.getMessage());
         }
     }
 
@@ -49,7 +53,6 @@ public class StudentController {
         }catch (Exception e){
             throw new RuntimeException("Error occurred..." + e.getMessage());
         }
-
     }
 
     @DeleteMapping("/delete/{id}")
@@ -58,7 +61,7 @@ public class StudentController {
             studentService.deleteStudent(id);
             return new ResponseEntity<>("Student Deleted", HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error occurred..." + e.getMessage());
         }
     }
 
@@ -68,7 +71,7 @@ public class StudentController {
             studentService.saveAllStudents(students);
             return new ResponseEntity<>("Students Added...", HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error occurred..." + e.getMessage());
         }
     }
 }

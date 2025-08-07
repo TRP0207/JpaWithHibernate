@@ -89,14 +89,14 @@ public class StudentServiceImpl implements StudentService{
             student.setName(studentRequestDTO.getName());
             student.setAddress(addressMapper.toEntity(studentRequestDTO.getAddress()));
             student.setMarks(studentRequestDTO.getMarks());
-            List<Course> cours = new ArrayList<>();
+            List<Course> courseList = new ArrayList<>();
             for (Integer courseCode : studentRequestDTO.getCourses()) {
                 Course course = courseRepository.findById(courseCode)
                         .orElseThrow(() -> new RuntimeException("Course not found: " + courseCode));
-                cours.add(course);
+                courseList.add(course);
                 //course.getStudents().add(student); // bi-directional
             }
-            student.setCourses(cours);
+            student.setCourses(courseList);
             studentList.add(student);
             student=null;
         }

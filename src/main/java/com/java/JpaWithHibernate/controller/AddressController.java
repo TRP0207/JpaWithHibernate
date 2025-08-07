@@ -21,7 +21,7 @@ public class AddressController {
         try {
             return new ResponseEntity<>(addressService.saveAddress(address), HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error occurred..." + e.getMessage());
         }
     }
 
@@ -46,7 +46,7 @@ public class AddressController {
             addressService.deleteAddress(id);
             return new ResponseEntity<>("Address Deleted", HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Error occurred..." + e.getMessage());
         }
     }
 }
