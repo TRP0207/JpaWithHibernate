@@ -5,7 +5,7 @@ import java.util.List;
 public class StudentRequestDTO {
     private String name;
     private String marks;
-    private List<Integer> courseCodes; // only course codes for input
+    private List<Integer> courses; // only course codes for input
     private AddressRequestDTO address;
 
     // Getters and Setters
@@ -25,12 +25,12 @@ public class StudentRequestDTO {
         this.marks = marks;
     }
 
-    public List<Integer> getCourseCodes() {
-        return courseCodes;
+    public List<Integer> getCourses() {
+        return courses;
     }
 
-    public void setCourseCodes(List<Integer> courseCodes) {
-        this.courseCodes = courseCodes;
+    public void setCourses(List<Integer> courses) {
+        this.courses = courses;
     }
 
     public AddressRequestDTO getAddress() {

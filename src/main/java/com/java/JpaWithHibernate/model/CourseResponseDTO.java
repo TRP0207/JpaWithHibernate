@@ -1,11 +1,13 @@
 package com.java.JpaWithHibernate.model;
 
+import com.java.JpaWithHibernate.repo.StudentRepository;
+
 import java.util.List;
 
 public class CourseResponseDTO {
     private int courseCode;
     private String courseName;
-    private List<StudentRequestDTO> students;
+//    private List<StudentResponseDTO> students;
 
     // Getters and Setters
     public int getCourseCode() {
@@ -24,12 +26,12 @@ public class CourseResponseDTO {
         this.courseName = courseName;
     }
 
-    public List<StudentRequestDTO> getStudents() {
+    /*public List<StudentResponseDTO> getStudents() {
         return students;
     }
 
-    public void setStudents(List<StudentRequestDTO> students) {
+    public void setStudents(List<StudentResponseDTO> students) {
         this.students = students;
-    }
+    }*/
 }
 

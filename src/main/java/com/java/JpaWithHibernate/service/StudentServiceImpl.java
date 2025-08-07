@@ -1,5 +1,7 @@
 package com.java.JpaWithHibernate.service;
 
+import com.java.JpaWithHibernate.mapper.AddressMapper;
+import com.java.JpaWithHibernate.mapper.StudentMapper;
 import com.java.JpaWithHibernate.model.*;
 import com.java.JpaWithHibernate.repo.CourseRepository;
 import com.java.JpaWithHibernate.repo.StudentRepository;
@@ -24,6 +26,11 @@ public class StudentServiceImpl implements StudentService{
     @Autowired
     EntityManagerFactory entityManagerFactory;
 
+    @Autowired
+    AddressMapper addressMapper;
+
+    @Autowired
+    StudentMapper studentMapper;
 
     @Override
     public String saveStudent(StudentRequestDTO studentRequestDTO) throws Exception{
@@ -33,17 +40,16 @@ public class StudentServiceImpl implements StudentService{
             Student student = new Student();
             student.setName(studentRequestDTO.getName());
             student.setMarks(studentRequestDTO.getMarks());
-            student.setAddress(convertToAddressEntity(studentRequestDTO.getAddress()));
-
-            List<Course> cours = new ArrayList<>();
-            for (Integer courseCode : studentRequestDTO.getCourseCodes()) {
+            student.setAddress(addressMapper.toEntity(studentRequestDTO.getAddress()));
+            List<Course> courses = new ArrayList<>();
+            for (Integer courseCode : studentRequestDTO.getCourses()) {
                 Course course = courseRepository.findById(courseCode)
                         .orElseThrow(() -> new RuntimeException("Course not found: " + courseCode));
-                cours.add(course);
+                courses.add(course);
                 //course.getStudents().add(student); // bi-directional
             }
 
-            student.setCourses(cours);
+            student.setCourses(courses);
             studentRepository.save(student);
             transaction.commit();
             entityManager.close();
@@ -51,10 +57,11 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public List<Student> findUserByName(String name){
-        List<Student> students;
+    public List<StudentResponseDTO> findUserByName(String name){
+        List<StudentResponseDTO> students;
         try {
-            students = studentRepository.findByName(name);
+            List<Student> studentsList = studentRepository.findByName(name);
+            students = studentMapper.toDtoList(studentsList);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -62,9 +69,8 @@ public class StudentServiceImpl implements StudentService{
     }
 
     @Override
-    public List<Student> getAllStudents() {
-        List<Student> studentList = studentRepository.findAll();
-        return studentList;
+    public List<StudentResponseDTO> getAllStudents() {
+        return studentMapper.toDtoList(studentRepository.findAll());
     }
 
     @Override
@@ -81,10 +87,10 @@ public class StudentServiceImpl implements StudentService{
         for(StudentRequestDTO studentRequestDTO : studentRequestDTOList){
             Student student = new Student();
             student.setName(studentRequestDTO.getName());
-            student.setAddress(convertToAddressEntity(studentRequestDTO.getAddress()));
+            student.setAddress(addressMapper.toEntity(studentRequestDTO.getAddress()));
             student.setMarks(studentRequestDTO.getMarks());
             List<Course> cours = new ArrayList<>();
-            for (Integer courseCode : studentRequestDTO.getCourseCodes()) {
+            for (Integer courseCode : studentRequestDTO.getCourses()) {
                 Course course = courseRepository.findById(courseCode)
                         .orElseThrow(() -> new RuntimeException("Course not found: " + courseCode));
                 cours.add(course);
@@ -97,15 +103,6 @@ public class StudentServiceImpl implements StudentService{
         studentRepository.saveAll(studentList);
         transaction.commit();
         entityManager.close();
-    }
-
-    public Address convertToAddressEntity(AddressRequestDTO dto) {
-        Address address = new Address();
-        address.setId(dto.getId());
-        address.setAddLine1(dto.getAddLine1());
-        address.setAddLine2(dto.getAddLine2());
-        address.setPinCode(dto.getPinCode());
-        return address;
     }
 
 

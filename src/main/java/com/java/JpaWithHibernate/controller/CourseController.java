@@ -1,6 +1,8 @@
 package com.java.JpaWithHibernate.controller;
 
 import com.java.JpaWithHibernate.model.Course;
+import com.java.JpaWithHibernate.model.CourseRequestDTO;
+import com.java.JpaWithHibernate.model.CourseResponseDTO;
 import com.java.JpaWithHibernate.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,18 +19,18 @@ public class CourseController {
     CourseService courseService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addCourse(@RequestBody Course course){
+    public ResponseEntity<String> addCourse(@RequestBody CourseRequestDTO courseRequestDTO){
         try {
-            return new ResponseEntity<>(courseService.saveCourse(course), HttpStatus.CREATED);
+            return new ResponseEntity<>(courseService.saveCourse(courseRequestDTO), HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Course>> getCourse(){
+    public ResponseEntity<List<CourseResponseDTO>> getCourse(){
         try{
-            List<Course> courseList = courseService.getAllCourse();
+            List<CourseResponseDTO> courseList = courseService.getAllCourse();
             if (courseList != null) {
                 return new ResponseEntity<>(courseList, HttpStatus.OK);
             } else {
@@ -50,9 +52,9 @@ public class CourseController {
     }
 
     @PostMapping("/addAll")
-    public ResponseEntity<String> addAllCourses(@RequestBody List<Course> cours){
+    public ResponseEntity<String> addAllCourses(@RequestBody List<CourseRequestDTO> courseRequestDTOList){
         try{
-            courseService.saveAllCourses(cours);
+            courseService.saveAllCourses(courseRequestDTOList);
             return new ResponseEntity<>("Courses Added...", HttpStatus.CREATED);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

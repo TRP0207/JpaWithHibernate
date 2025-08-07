@@ -17,7 +17,7 @@ public class Student {
 
     @ManyToMany
     @JsonIgnore
-    private List<Course> course = new ArrayList<>();
+    private List<Course> courses = new ArrayList<>();
 
     private String marks;
 
@@ -41,11 +41,11 @@ public class Student {
     }
 
     public List<Course> getCourses() {
-        return course;
+        return courses;
     }
 
-    public void setCourses(List<Course> cours) {
-        this.course = cours;
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
     }
 
     public String getMarks() {

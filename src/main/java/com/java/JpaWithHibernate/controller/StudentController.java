@@ -2,6 +2,7 @@ package com.java.JpaWithHibernate.controller;
 
 import com.java.JpaWithHibernate.model.Student;
 import com.java.JpaWithHibernate.model.StudentRequestDTO;
+import com.java.JpaWithHibernate.model.StudentResponseDTO;
 import com.java.JpaWithHibernate.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +28,8 @@ public class StudentController {
     }
 
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<List<Student>> getStudentByName(@PathVariable String name){
-        List<Student> students = studentService.findUserByName(name);
+    public ResponseEntity<List<StudentResponseDTO>> getStudentByName(@PathVariable String name){
+        List<StudentResponseDTO> students = studentService.findUserByName(name);
         if (students != null) {
             return new ResponseEntity<>(students, HttpStatus.OK);
         } else {
@@ -37,9 +38,9 @@ public class StudentController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Student>> getAllStudents(){
+    public ResponseEntity<List<StudentResponseDTO>> getAllStudents(){
         try{
-            List<Student> studentList = studentService.getAllStudents();
+            List<StudentResponseDTO> studentList = studentService.getAllStudents();
             if (studentList != null) {
                 return new ResponseEntity<>(studentList, HttpStatus.OK);
             } else {

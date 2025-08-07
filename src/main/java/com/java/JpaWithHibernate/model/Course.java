@@ -16,7 +16,7 @@ public class Course {
 
     private String courseName;
 
-    @ManyToMany(mappedBy = "course")
+    @ManyToMany(mappedBy = "courses")
     @JsonIgnore
     private List<Student> students = new ArrayList<>();
 
