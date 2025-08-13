@@ -37,7 +37,9 @@ public class StudentServiceImpl implements StudentService{
             EntityManager entityManager = entityManagerFactory.createEntityManager();
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
-            Student student = new Student();
+
+            studentRepository.save(studentMapper.toEntity(studentRequestDTO));
+            /*Student student = new Student();
             student.setName(studentRequestDTO.getName());
             student.setMarks(studentRequestDTO.getMarks());
             student.setAddress(addressMapper.toEntity(studentRequestDTO.getAddress()));
@@ -50,7 +52,7 @@ public class StudentServiceImpl implements StudentService{
             }
 
             student.setCourses(courses);
-            studentRepository.save(student);
+            studentRepository.save(student);*/
             transaction.commit();
             entityManager.close();
             return "Student is Saved...";
@@ -83,7 +85,9 @@ public class StudentServiceImpl implements StudentService{
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction =entityManager.getTransaction();
         transaction.begin();
-        List<Student> studentList = new ArrayList<>();
+
+        studentRepository.saveAll(studentMapper.toEntityList(studentRequestDTOList));
+        /*List<Student> studentList = new ArrayList<>();
         for(StudentRequestDTO studentRequestDTO : studentRequestDTOList){
             Student student = new Student();
             student.setName(studentRequestDTO.getName());
@@ -100,7 +104,7 @@ public class StudentServiceImpl implements StudentService{
             studentList.add(student);
             student=null;
         }
-        studentRepository.saveAll(studentList);
+        studentRepository.saveAll(studentList);*/
         transaction.commit();
         entityManager.close();
     }

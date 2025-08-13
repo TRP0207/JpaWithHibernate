@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "student_table")
 public class Student {
 
     @Id
@@ -17,6 +18,9 @@ public class Student {
 
     @ManyToMany
     @JsonIgnore
+    @JoinTable(
+            name = "student_course_table"
+    )
     private List<Course> courses = new ArrayList<>();
 
     private String marks;
