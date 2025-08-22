@@ -9,6 +9,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -56,6 +60,13 @@ public class StudentServiceImpl implements StudentService{
             transaction.commit();
             entityManager.close();
             return "Student is Saved...";
+    }
+
+    @Override
+    public Page<StudentResponseDTO> getPaginatedStudentList(int page, int size, String sortBy){
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Page<Student> studentList = studentRepository.findAll(pageable);
+        return studentList.map(studentMapper::toDto);
     }
 
     @Override

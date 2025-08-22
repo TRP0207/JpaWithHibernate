@@ -5,6 +5,7 @@ import com.java.JpaWithHibernate.model.StudentRequestDTO;
 import com.java.JpaWithHibernate.model.StudentResponseDTO;
 import com.java.JpaWithHibernate.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -72,6 +73,17 @@ public class StudentController {
             return new ResponseEntity<>("Students Added...", HttpStatus.CREATED);
         }catch (Exception e){
             throw new RuntimeException("Error occurred..." + e.getMessage());
+        }
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<StudentResponseDTO>> getPaginatedStudentList(@RequestParam(defaultValue = "0") int page,
+                                                                            @RequestParam(defaultValue = "5") int size,
+                                                                            @RequestParam(defaultValue = "id") String sortBy) {
+        try {
+            return new ResponseEntity<>(studentService.getPaginatedStudentList(page, size, sortBy), HttpStatus.OK);
+        } catch (Exception e) {
+                throw new RuntimeException("Error occurred..." + e.getMessage());
         }
     }
 }

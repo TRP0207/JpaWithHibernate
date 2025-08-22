@@ -3,6 +3,7 @@ package com.java.JpaWithHibernate.service;
 import com.java.JpaWithHibernate.model.Student;
 import com.java.JpaWithHibernate.model.StudentRequestDTO;
 import com.java.JpaWithHibernate.model.StudentResponseDTO;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface StudentService {
     public List<StudentResponseDTO> getAllStudents();
     public void deleteStudent(int id);
     public void saveAllStudents(List<StudentRequestDTO> students);
+    public Page<StudentResponseDTO> getPaginatedStudentList(int page, int size, String sortBy);
 }
